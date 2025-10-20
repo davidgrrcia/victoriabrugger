@@ -1,7 +1,7 @@
 "use client";
 
+import { TimeBlock } from "@/components/shared/time-block";
 import { useEffect, useState } from "react";
-import { TimeBlock } from "./time-block";
 
 export function CountdownTimer({ endDate }: { endDate: Date }) {
   const [timeLeft, setTimeLeft] = useState({
