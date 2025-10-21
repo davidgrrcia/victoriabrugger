@@ -1,22 +1,45 @@
-import { Footer } from "@/components/home/footer";
-import { ClosingSection } from "@/components/masterclass/closing-section";
-import { HeroSection } from "@/components/masterclass/hero-section";
-import { OfferingSection } from "@/components/masterclass/offering-section";
-import { PricingSection } from "@/components/masterclass/pricing-section";
-import { TestimonialSection } from "@/components/masterclass/testimonial-section";
+"use client";
+
+import { EntranceGate } from "@/components/masterclass/entrance-gate";
+import { StageNavigation } from "@/components/masterclass/stage-navigation";
+import { useState } from "react";
+
+type Stage =
+  | "entrance"
+  | "awakening"
+  | "journey"
+  | "manifesto"
+  | "choose-pack"
+  | "final";
 
 export default function MasterclassPage() {
-  // Pre-sale end date (10 days from October 21, 2025)
-  const presaleEndDate = new Date("2025-10-31T23:59:59");
+  const [currentStage, setCurrentStage] = useState<Stage>("entrance");
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  const handleEntranceComplete = (userAnswers: Record<string, string>) => {
+    setAnswers(userAnswers);
+    setCurrentStage("awakening");
+  };
+
+  const goToStage = (stage: Stage) => {
+    setCurrentStage(stage);
+  };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-hidden">
-      <HeroSection endDate={presaleEndDate} />
-      <OfferingSection />
-      <TestimonialSection />
-      <PricingSection />
-      <ClosingSection />
-      <Footer />
+    <div className="fixed inset-0 bg-black text-white overflow-hidden">
+      {/* Entrance Gate */}
+      {currentStage === "entrance" && (
+        <EntranceGate onComplete={handleEntranceComplete} />
+      )}
+
+      {/* Main Journey - Stage-based navigation */}
+      {currentStage !== "entrance" && (
+        <StageNavigation
+          currentStage={currentStage}
+          answers={answers}
+          onStageChange={goToStage}
+        />
+      )}
     </div>
   );
 }
